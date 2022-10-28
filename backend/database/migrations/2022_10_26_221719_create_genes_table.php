@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('previousSymbols');
             $table->string('aliasSymbols');
             $table->string('hgncId');
-            $table->timestamps();
         });
     }
 
