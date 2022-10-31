@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Gene;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,19 +15,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    $jsonData = file_get_contents('http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/json/locus_types/gene_with_protein_product.json');
-    $data = json_decode($jsonData);
-    $gene = $data->response->docs[12470];
-    dd($gene);
-    // $id = DB::table('genes')->insertGetId([
-    //     'symbol' => $gene->symbol,
-    //     'location' => $gene->location,
-    //     'name' => $gene->name,
-    //     'type' => $gene->locus_type,
-    //     'previousSymbols' => implode(', ',$gene->alias_symbol),
-    //     'aliasSymbols' => implode(', ',$gene->alias_symbol),
-    //     'hgncId' => $gene->hgnc_id,
-    // ]);
-    return $id;
+    $gene = Gene::paginate(15);
+    return json_encode($gene);
     // return view('welcome');
+});
+
+Route::get('/search/{symbol}', function ($symbol) {
+    $geneSearch = Gene::where('symbol','ilike',$symbol.'%')->get();
+    return json_encode($geneSearch);
+});
+
+Route::get('/gene/{id}', function ($id){
+    $gene = Gene::where('id',$id)->first();
+    return json_encode($gene);
 });
