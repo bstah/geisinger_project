@@ -55,7 +55,6 @@
         searchGenes: debounce(async function() {
             if(this.query && this.query.length > 1){
             const data = await this.$axios.get(`http://192.168.1.26/api/search/${this.query}`)
-            console.log(data.data)
             if(data && data.data)
                 this.genes = data.data;
             else
